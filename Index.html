@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIBO | ZEVON</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f3f5f9;color:#17243b;font-family:Arial,sans-serif}
+header{background:#101d35;color:white;padding:24px 20px}
+header h1{margin:0;font-size:30px;letter-spacing:2px}
+header p{margin:7px 0 0;color:#bdc9dc}
+main{padding:20px;max-width:850px;margin:auto}
+h2{font-size:23px}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.card{background:white;padding:17px;border-radius:12px;box-shadow:0 2px 8px #17243b0b}
+.card p{color:#68758a;margin:0 0 10px}
+.card h3{margin:0;font-size:23px}
+section{margin-top:25px}
+button{background:#155eef;color:white;border:0;padding:13px 18px;border-radius:8px;font-weight:bold}
+input{width:100%;padding:13px;border:1px solid #ccd3df;border-radius:8px;margin:7px 0 12px}
+.product{background:white;padding:14px;margin:10px 0;border-radius:10px}
+footer{text-align:center;padding:25px;color:#778196;font-size:13px}
+</style>
+</head>
+<body>
+<header>
+<h1>AIBO</h1>
+<p>AI Business Operator · A ZEVON Company</p>
+</header>
+
+<main>
+<h2>Business Dashboard</h2>
+<p>Welcome to your business operating system.</p>
+
+<div class="stats">
+<div class="card"><p>Total Sales</p><h3 id="sales">KSh 0</h3></div>
+<div class="card"><p>Orders</p><h3 id="orders">0</h3></div>
+<div class="card"><p>Products</p><h3 id="count">0</h3></div>
+<div class="card"><p>Commission</p><h3 id="commission">KSh 0</h3></div>
+</div>
+
+<section>
+<h2>Products</h2>
+<div class="card">
+<label>Product name</label>
+<input id="name" placeholder="e.g. Blue T-shirt">
+<label>Price (KSh)</label>
+<input id="price" type="number" placeholder="e.g. 1500">
+<button onclick="addProduct()">Add Product</button>
+</div>
+<div id="products"></div>
+</section>
+
+<section>
+<h2>Business finances</h2>
+<div class="card">
+<p>Platform commission rate</p>
+<h3>5%</h3>
+<p>Charged on completed product sales, excluding delivery fees.</p>
+</div>
+</section>
+</main>
+
+<footer>© 2026 ZEVON · AIBO Business Platform</footer>
+
+<script>
+let products=[];
+function addProduct(){
+ const name=document.getElementById("name").value.trim();
+ const price=Number(document.getElementById("price").value);
+ if(!name||price<=0){alert("Enter a product name and valid price.");return;}
+ products.push({name,price});
+ document.getElementById("name").value="";
+ document.getElementById("price").value="";
+ render();
+}
+function render(){
+ document.getElementById("count").textContent=products.length;
+ document.getElementById("products").innerHTML=products.map(p=>
+ `<div class="product"><strong>${p.name.replace(/[&<>"']/g,"")}</strong><p>KSh ${p.price.toLocaleString()}</p></div>`
+ ).join("");
+}
+</script>
+</body>
+</html>
