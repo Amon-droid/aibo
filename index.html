@@ -1,41 +1,45 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AIBO | ZEVON</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#f4f6fa;color:#172033;font-family:Arial,sans-serif}
-header{background:#101b35;color:white;padding:22px}
-header h1{margin:0;font-size:25px}
-header p{margin:6px 0 0;color:#bdc8dc}
-main{max-width:950px;margin:25px auto;padding:0 15px}
-.card{background:white;padding:20px;border-radius:13px;margin-bottom:18px;box-shadow:0 3px 14px #14213b0c}
-h2{margin-top:0;font-size:19px}
-input{width:100%;padding:13px;margin:7px 0 12px;border:1px solid #d6dce7;border-radius:8px;font-size:15px}
-button{border:0;border-radius:8px;padding:12px 16px;background:#2457d6;color:white;font-weight:bold;cursor:pointer;margin:4px 3px 4px 0}
-button.secondary{background:#e8edf7;color:#172033}
-button.danger{background:#c83d48}
-button:disabled{opacity:.5}
+header{background:#101b35;color:white;padding:20px}
+header h1{margin:0}
+header p{margin:6px 0;color:#bdc8dc}
+main{max-width:1050px;margin:24px auto;padding:0 14px}
+.card{background:white;padding:19px;border-radius:13px;margin-bottom:17px;box-shadow:0 3px 14px #14213b0c}
+h2{font-size:19px;margin-top:0}
+input,select{width:100%;padding:12px;margin:7px 0 12px;border:1px solid #d6dce7;border-radius:8px;font-size:15px}
+button{border:0;border-radius:8px;padding:11px 14px;background:#2457d6;color:white;font-weight:bold;cursor:pointer;margin:4px 3px 4px 0}
+.secondary{background:#e8edf7;color:#172033}
+.danger{background:#c83d48}
 .hidden{display:none!important}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.stat{background:#eef3ff;padding:16px;border-radius:10px}
-.stat strong{display:block;font-size:23px;margin-top:7px}
-table{width:100%;border-collapse:collapse}
-th,td{text-align:left;padding:12px 8px;border-bottom:1px solid #e8ebf1}
-th{color:#65718a;font-size:13px}
 .small{font-size:13px;color:#68758c}
-#message{padding:10px;border-radius:8px;margin-bottom:12px;display:none}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.stat{background:#eef3ff;padding:15px;border-radius:10px}
+.stat strong{display:block;font-size:22px;margin-top:7px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:13px}
+.product{border:1px solid #e4e8ef;border-radius:10px;padding:15px}
+.product h3{margin:0 0 8px}
+.price{font-size:19px;font-weight:bold}
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;padding:11px 7px;border-bottom:1px solid #e8ebf1;vertical-align:top}
+th{font-size:13px;color:#68758c}
+#message{padding:11px;border-radius:8px;margin-bottom:12px;display:none}
 #message.error{display:block;background:#ffebeb;color:#a12626}
 #message.success{display:block;background:#e7f8ed;color:#176b39}
-@media(max-width:600px){.stats{grid-template-columns:1fr 1fr}table{font-size:13px}th,td{padding:9px 4px}}
+.linkbox{overflow-wrap:anywhere;background:#f1f4f9;padding:11px;border-radius:8px}
+@media(max-width:600px){.stats{grid-template-columns:1fr 1fr}th,td{font-size:12px;padding:8px 4px}}
 </style>
 </head>
 <body>
-
 <header>
 <h1>ZEVON</h1>
 <p>AIBO — AI Business Operator</p>
@@ -46,27 +50,30 @@ th{color:#65718a;font-size:13px}
 
 <section id="authSection" class="card">
 <h2>Merchant account</h2>
-<p class="small">Create an account or sign in to manage your business.</p>
-
-<label>Email address</label>
-<input id="email" type="email" placeholder="Enter your email">
-
-<label>Password</label>
-<input id="password" type="password" placeholder="At least 6 characters">
-
+<p class="small">Sign in or create your merchant account.</p>
+<input id="email" type="email" placeholder="Email address">
+<input id="password" type="password" placeholder="Password">
 <button onclick="signUp()">Create account</button>
 <button class="secondary" onclick="signIn()">Sign in</button>
 </section>
 
-<section id="appSection" class="hidden">
+<section id="dashboard" class="hidden">
 <div class="card">
-<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap">
 <div>
 <h2>Business dashboard</h2>
-<p class="small" id="userEmail"></p>
+<p class="small" id="merchantEmail"></p>
 </div>
 <button class="secondary" onclick="signOut()">Sign out</button>
 </div>
+</div>
+
+<div class="card">
+<h2>Your public storefront</h2>
+<p class="small">Share this link with customers. They can browse and order without creating an account.</p>
+<div class="linkbox" id="storeLink"></div>
+<button onclick="copyStoreLink()">Copy storefront link</button>
+<button class="secondary" onclick="openStore()">Open storefront</button>
 </div>
 
 <div class="stats">
@@ -75,39 +82,70 @@ th{color:#65718a;font-size:13px}
 <div class="stat">Inventory value<strong id="inventoryValue">KSh 0</strong></div>
 </div>
 
-<div class="card" style="margin-top:18px">
+<div class="card" style="margin-top:17px">
 <h2 id="formTitle">Add a product</h2>
 <input id="productName" placeholder="Product name">
-<input id="productPrice" type="number" min="0.01" step="0.01" placeholder="Selling price (KSh)">
+<input id="productPrice" type="number" min="0.01" step="0.01" placeholder="Price (KSh)">
 <input id="productStock" type="number" min="0" step="1" placeholder="Available stock">
-<button onclick="saveProduct()" id="saveButton">Save product</button>
-<button class="secondary hidden" id="cancelButton" onclick="cancelEdit()">Cancel edit</button>
+<button id="saveButton" onclick="saveProduct()">Save product</button>
+<button id="cancelButton" class="secondary hidden" onclick="cancelEdit()">Cancel</button>
 </div>
 
 <div class="card">
 <h2>Your products</h2>
 <div style="overflow-x:auto">
 <table>
-<thead>
-<tr>
-<th>Product</th>
-<th>Price</th>
-<th>Stock</th>
-<th>Actions</th>
-</tr>
-</thead>
-<tbody id="productList">
-<tr><td colspan="4">Loading products...</td></tr>
-</tbody>
+<thead><tr><th>Product</th><th>Price</th><th>Stock</th><th>Actions</th></tr></thead>
+<tbody id="productList"></tbody>
 </table>
 </div>
-<p class="small" id="emptyMessage"></p>
 </div>
 
 <div class="card">
-<h2>AIBO commission model</h2>
-<p>Proposed commission: <strong>5%</strong> of completed product sales, excluding delivery charges.</p>
-<p class="small">Order processing, payments and commission collection are not yet implemented.</p>
+<h2>Customer orders</h2>
+<p class="small">Manage orders placed through your public storefront.</p>
+<div style="overflow-x:auto">
+<table>
+<thead><tr><th>Order</th><th>Customer</th><th>Items</th><th>Total</th><th>Status</th><th>Action</th></tr></thead>
+<tbody id="orderList"></tbody>
+</table>
+</div>
+</div>
+
+<div class="card">
+<h2>Sales and commission</h2>
+<div class="stats">
+<div class="stat">Completed sales<strong id="salesTotal">KSh 0</strong></div>
+<div class="stat">Proposed 5% commission<strong id="commissionTotal">KSh 0</strong></div>
+</div>
+<p class="small">Commission is calculated on completed product sales, excluding delivery. This is a tracking estimate, not an actual payment or collection.</p>
+</div>
+</section>
+
+<section id="storefront" class="hidden">
+<div class="card">
+<h2 id="storeTitle">Merchant storefront</h2>
+<p class="small">Browse products and order directly. No customer account required.</p>
+</div>
+
+<div class="card">
+<h2>Available products</h2>
+<div id="storeProducts" class="grid"></div>
+</div>
+
+<div class="card">
+<h2>Your shopping cart</h2>
+<div id="cartItems">Your cart is empty.</div>
+<p><strong id="cartTotal">Subtotal: KSh 0</strong></p>
+</div>
+
+<div class="card">
+<h2>Customer checkout</h2>
+<input id="customerName" placeholder="Your full name">
+<input id="customerPhone" type="tel" placeholder="Your phone number">
+<input id="customerAddress" placeholder="Delivery address">
+<p class="small">Delivery charges are not included. The merchant will confirm delivery arrangements.</p>
+<button onclick="placeOrder()">Place order</button>
 </div>
 </section>
 </main>
@@ -115,256 +153,435 @@ th{color:#65718a;font-size:13px}
 <script>
 const SUPABASE_URL = "https://qcubbcgyjklzjiepqshj.supabase.co";
 const SUPABASE_KEY = "sb_publishable_k60zm0LE4iJGDc_Zh9Vxuw_Ajulv0no";
-
-const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const db = window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
 let currentUser = null;
 let products = [];
+let cart = [];
 let editingId = null;
 
-function showMessage(message, type="success") {
-  const box = document.getElementById("message");
-  box.textContent = message;
-  box.className = type;
-  box.style.display = "block";
+const params = new URLSearchParams(window.location.search);
+const storeId = params.get("store");
+const publicMode = Boolean(storeId);
+
+function money(value){
+ return "KSh " + Number(value || 0).toLocaleString("en-KE",{maximumFractionDigits:2});
 }
 
-function clearMessage() {
-  const box = document.getElementById("message");
-  box.style.display = "none";
+function message(text,type="success"){
+ const box=document.getElementById("message");
+ box.textContent=text;
+ box.className=type;
+ box.style.display="block";
+ window.scrollTo({top:0,behavior:"smooth"});
 }
 
-function showApp(user) {
-  currentUser = user;
-  document.getElementById("authSection").classList.add("hidden");
-  document.getElementById("appSection").classList.remove("hidden");
-  document.getElementById("userEmail").textContent = user.email || "";
-  loadProducts();
+function clearMessage(){
+ const box=document.getElementById("message");
+ box.style.display="none";
 }
 
-function showAuth() {
-  currentUser = null;
-  products = [];
-  document.getElementById("authSection").classList.remove("hidden");
-  document.getElementById("appSection").classList.add("hidden");
+function showAuth(){
+ document.getElementById("authSection").classList.remove("hidden");
+ document.getElementById("dashboard").classList.add("hidden");
 }
 
-async function signUp() {
-  clearMessage();
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value;
-
-  if (!email || password.length < 6) {
-    showMessage("Enter a valid email and a password of at least 6 characters.", "error");
-    return;
-  }
-
-  const {data, error} = await db.auth.signUp({email, password});
-
-  if (error) {
-    showMessage(error.message, "error");
-    return;
-  }
-
-  if (data.session) {
-    showApp(data.user);
-    showMessage("Account created successfully.");
-  } else {
-    showMessage("Account created. Check your email to confirm your account, then sign in.");
-  }
+function showDashboard(user){
+ currentUser=user;
+ document.getElementById("authSection").classList.add("hidden");
+ document.getElementById("dashboard").classList.remove("hidden");
+ document.getElementById("merchantEmail").textContent=user.email || "";
+ document.getElementById("storeLink").textContent=storeUrl();
+ loadProducts();
+ loadOrders();
 }
 
-async function signIn() {
-  clearMessage();
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value;
-
-  const {data, error} = await db.auth.signInWithPassword({email, password});
-
-  if (error) {
-    showMessage(error.message, "error");
-    return;
-  }
-
-  showApp(data.user);
-  showMessage("Signed in successfully.");
+function storeUrl(){
+ return window.location.origin+window.location.pathname+"?store="+currentUser.id;
 }
 
-async function signOut() {
-  const {error} = await db.auth.signOut();
-  if (error) {
-    showMessage(error.message, "error");
-    return;
-  }
-  showAuth();
-  showMessage("You have signed out.");
+function copyStoreLink(){
+ if(!currentUser)return;
+ if(navigator.clipboard && navigator.clipboard.writeText){
+  navigator.clipboard.writeText(storeUrl())
+   .then(()=>message("Storefront link copied."))
+   .catch(()=>message("Copy this link: "+storeUrl(),"error"));
+ }else{
+  message("Copy this link: "+storeUrl());
+ }
 }
 
-async function loadProducts() {
-  if (!currentUser) return;
-
-  const {data, error} = await db
-    .from("products")
-    .select("*")
-    .order("created_at", {ascending:false});
-
-  if (error) {
-    showMessage("Could not load products: " + error.message, "error");
-    return;
-  }
-
-  products = data || [];
-  renderProducts();
+function openStore(){
+ window.open(storeUrl(),"_blank");
 }
 
-function renderProducts() {
-  const list = document.getElementById("productList");
-  list.innerHTML = "";
+async function signUp(){
+ clearMessage();
+ const email=document.getElementById("email").value.trim();
+ const password=document.getElementById("password").value;
+ if(!email || password.length<6){
+  message("Enter a valid email and password of at least 6 characters.","error");
+  return;
+ }
+ const {data,error}=await db.auth.signUp({email,password});
+ if(error){message(error.message,"error");return;}
+ if(data.session){
+  showDashboard(data.user);
+  message("Account created successfully.");
+ }else{
+  message("Account created. Confirm your email, then sign in.");
+ }
+}
 
-  let totalStock = 0;
-  let totalValue = 0;
+async function signIn(){
+ clearMessage();
+ const email=document.getElementById("email").value.trim();
+ const password=document.getElementById("password").value;
+ const {data,error}=await db.auth.signInWithPassword({email,password});
+ if(error){message(error.message,"error");return;}
+ showDashboard(data.user);
+ message("Signed in successfully.");
+}
 
-  products.forEach(product => {
-    totalStock += Number(product.stock || 0);
-    totalValue += Number(product.price || 0) * Number(product.stock || 0);
+async function signOut(){
+ const {error}=await db.auth.signOut();
+ if(error){message(error.message,"error");return;}
+ showAuth();
+}
 
-    const tr = document.createElement("tr");
+async function loadProducts(){
+ if(!currentUser)return;
+ const {data,error}=await db.from("products")
+  .select("*").order("created_at",{ascending:false});
+ if(error){message(error.message,"error");return;}
+ products=data || [];
+ renderProducts();
+}
 
-    const name = document.createElement("td");
-    name.textContent = product.name;
+function renderProducts(){
+ const list=document.getElementById("productList");
+ list.innerHTML="";
+ let stock=0,value=0;
 
-    const price = document.createElement("td");
-    price.textContent = "KSh " + Number(product.price).toLocaleString();
+ products.forEach(p=>{
+  stock+=Number(p.stock||0);
+  value+=Number(p.stock||0)*Number(p.price||0);
+  const tr=document.createElement("tr");
+  const name=document.createElement("td");
+  name.textContent=p.name;
+  const price=document.createElement("td");
+  price.textContent=money(p.price);
+  const qty=document.createElement("td");
+  qty.textContent=p.stock;
+  const actions=document.createElement("td");
 
-    const stock = document.createElement("td");
-    stock.textContent = product.stock;
+  const edit=document.createElement("button");
+  edit.textContent="Edit";
+  edit.className="secondary";
+  edit.onclick=()=>startEdit(p);
 
-    const actions = document.createElement("td");
+  const del=document.createElement("button");
+  del.textContent="Delete";
+  del.className="danger";
+  del.onclick=()=>deleteProduct(p.id);
 
-    const edit = document.createElement("button");
-    edit.textContent = "Edit";
-    edit.className = "secondary";
-    edit.onclick = () => startEdit(product);
+  actions.append(edit,del);
+  tr.append(name,price,qty,actions);
+  list.append(tr);
+ });
 
-    const remove = document.createElement("button");
-    remove.textContent = "Delete";
-    remove.className = "danger";
-    remove.onclick = () => deleteProduct(product.id);
+ if(!products.length)list.innerHTML="<tr><td colspan='4'>No products yet.</td></tr>";
+ document.getElementById("productCount").textContent=products.length;
+ document.getElementById("stockCount").textContent=stock;
+ document.getElementById("inventoryValue").textContent=money(value);
+}
 
-    actions.append(edit, remove);
-    tr.append(name, price, stock, actions);
-    list.appendChild(tr);
+async function saveProduct(){
+ clearMessage();
+ const name=document.getElementById("productName").value.trim();
+ const price=Number(document.getElementById("productPrice").value);
+ const stock=Number(document.getElementById("productStock").value);
+ if(!name || !Number.isFinite(price) || price<=0 ||
+    !Number.isInteger(stock) || stock<0){
+  message("Enter a product name, a price above zero and a whole-number stock quantity.","error");
+  return;
+ }
+ const button=document.getElementById("saveButton");
+ button.disabled=true;
+ let result;
+ if(editingId){
+  result=await db.from("products").update({name,price,stock})
+   .eq("id",editingId).select();
+ }else{
+  result=await db.from("products").insert({
+   name,price,stock,user_id:currentUser.id
+  }).select();
+ }
+ button.disabled=false;
+ if(result.error){message(result.error.message,"error");return;}
+ cancelEdit();
+ await loadProducts();
+ message("Product saved successfully.");
+}
+
+function startEdit(p){
+ editingId=p.id;
+ document.getElementById("productName").value=p.name;
+ document.getElementById("productPrice").value=p.price;
+ document.getElementById("productStock").value=p.stock;
+ document.getElementById("formTitle").textContent="Edit product";
+ document.getElementById("saveButton").textContent="Update product";
+ document.getElementById("cancelButton").classList.remove("hidden");
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function cancelEdit(){
+ editingId=null;
+ document.getElementById("productName").value="";
+ document.getElementById("productPrice").value="";
+ document.getElementById("productStock").value="";
+ document.getElementById("formTitle").textContent="Add a product";
+ document.getElementById("saveButton").textContent="Save product";
+ document.getElementById("cancelButton").classList.add("hidden");
+}
+
+async function deleteProduct(id){
+ if(!confirm("Delete this product?"))return;
+ const {error}=await db.from("products").delete().eq("id",id);
+ if(error){message(error.message,"error");return;}
+ await loadProducts();
+ message("Product deleted.");
+}
+
+async function loadOrders(){
+ const {data,error}=await db.from("orders").select("*")
+  .order("created_at",{ascending:false});
+ if(error){message("Could not load orders: "+error.message,"error");return;}
+ renderOrders(data || []);
+}
+
+function renderOrders(orders){
+ const list=document.getElementById("orderList");
+ list.innerHTML="";
+ let sales=0;
+ orders.filter(o=>o.status==="Completed").forEach(o=>{
+  sales+=Number(o.subtotal||0);
+ });
+
+ document.getElementById("salesTotal").textContent=money(sales);
+ document.getElementById("commissionTotal").textContent=money(sales*.05);
+
+ if(!orders.length){
+  list.innerHTML="<tr><td colspan='6'>No customer orders yet.</td></tr>";
+  return;
+ }
+
+ orders.forEach(o=>{
+  const tr=document.createElement("tr");
+  const id=document.createElement("td");
+  id.textContent=String(o.id).slice(0,8);
+  const customer=document.createElement("td");
+  customer.textContent=o.customer_name+" · "+o.customer_phone;
+  const items=document.createElement("td");
+  items.textContent=(o.items||[]).map(i=>i.name+" × "+i.quantity).join(", ");
+  const total=document.createElement("td");
+  total.textContent=money(Number(o.subtotal)+Number(o.delivery_fee||0));
+  const status=document.createElement("td");
+  const select=document.createElement("select");
+  ["Pending","Confirmed","Processing","Completed","Cancelled"].forEach(s=>{
+   const option=document.createElement("option");
+   option.value=s;option.textContent=s;
+   if(o.status===s)option.selected=true;
+   select.append(option);
   });
-
-  document.getElementById("productCount").textContent = products.length;
-  document.getElementById("stockCount").textContent = totalStock.toLocaleString();
-  document.getElementById("inventoryValue").textContent =
-    "KSh " + totalValue.toLocaleString();
-
-  document.getElementById("emptyMessage").textContent =
-    products.length ? "" : "No products yet. Add your first product above.";
-
-  if (!products.length) {
-    list.innerHTML = '<tr><td colspan="4">No products added yet.</td></tr>';
-  }
+  select.onchange=()=>updateOrder(o.id,select.value);
+  status.append(select);
+  const action=document.createElement("td");
+  const details=document.createElement("button");
+  details.textContent="Details";
+  details.className="secondary";
+  details.onclick=()=>alert(
+   "Customer: "+o.customer_name+
+   "\nPhone: "+o.customer_phone+
+   "\nAddress: "+o.delivery_address+
+   "\nOrder: "+items.textContent+
+   "\nSubtotal: "+money(o.subtotal)
+  );
+  action.append(details);
+  tr.append(id,customer,items,total,status,action);
+  list.append(tr);
+ });
 }
 
-async function saveProduct() {
-  clearMessage();
-
-  const name = document.getElementById("productName").value.trim();
-  const price = Number(document.getElementById("productPrice").value);
-  const stock = Number(document.getElementById("productStock").value);
-
-  if (!name || !Number.isFinite(price) || price <= 0 ||
-      !Number.isInteger(stock) || stock < 0) {
-    showMessage("Enter a product name, a price above zero and a whole-number stock quantity.", "error");
-    return;
-  }
-
-  const button = document.getElementById("saveButton");
-  button.disabled = true;
-
-  let result;
-
-  if (editingId) {
-    result = await db.from("products")
-      .update({name, price, stock})
-      .eq("id", editingId)
-      .select();
-  } else {
-    result = await db.from("products")
-      .insert({
-        name,
-        price,
-        stock,
-        user_id: currentUser.id
-      })
-      .select();
-  }
-
-  button.disabled = false;
-
-  if (result.error) {
-    showMessage("Could not save product: " + result.error.message, "error");
-    return;
-  }
-
-  cancelEdit();
-  await loadProducts();
-  showMessage(editingId ? "Product updated." : "Product saved permanently.");
+async function updateOrder(id,status){
+ const {error}=await db.from("orders").update({status}).eq("id",id);
+ if(error){message("Could not update order: "+error.message,"error");return;}
+ await loadOrders();
+ message("Order status updated.");
 }
 
-function startEdit(product) {
-  editingId = product.id;
-  document.getElementById("productName").value = product.name;
-  document.getElementById("productPrice").value = product.price;
-  document.getElementById("productStock").value = product.stock;
-  document.getElementById("formTitle").textContent = "Edit product";
-  document.getElementById("saveButton").textContent = "Update product";
-  document.getElementById("cancelButton").classList.remove("hidden");
-  window.scrollTo({top:0, behavior:"smooth"});
+async function loadStorefront(){
+ document.getElementById("authSection").classList.add("hidden");
+ document.getElementById("dashboard").classList.add("hidden");
+ document.getElementById("storefront").classList.remove("hidden");
+
+ const {data,error}=await db.from("products")
+  .select("id,user_id,name,price,stock")
+  .eq("user_id",storeId)
+  .order("created_at",{ascending:false});
+
+ if(error){
+  message("Could not load this storefront: "+error.message,"error");
+  return;
+ }
+ products=(data||[]).filter(p=>Number(p.stock)>0);
+ document.getElementById("storeTitle").textContent="Welcome to this AIBO store";
+ renderStoreProducts();
+ renderCart();
 }
 
-function cancelEdit() {
-  editingId = null;
-  document.getElementById("productName").value = "";
-  document.getElementById("productPrice").value = "";
-  document.getElementById("productStock").value = "";
-  document.getElementById("formTitle").textContent = "Add a product";
-  document.getElementById("saveButton").textContent = "Save product";
-  document.getElementById("cancelButton").classList.add("hidden");
+function renderStoreProducts(){
+ const area=document.getElementById("storeProducts");
+ area.innerHTML="";
+ if(!products.length){
+  area.textContent="No products are currently available.";
+  return;
+ }
+ products.forEach(p=>{
+  const card=document.createElement("div");
+  card.className="product";
+  const title=document.createElement("h3");
+  title.textContent=p.name;
+  const price=document.createElement("p");
+  price.className="price";
+  price.textContent=money(p.price);
+  const available=document.createElement("p");
+  available.className="small";
+  available.textContent="Available stock: "+p.stock;
+  const add=document.createElement("button");
+  add.textContent="Add to cart";
+  add.onclick=()=>addToCart(p.id);
+  card.append(title,price,available,add);
+  area.append(card);
+ });
 }
 
-async function deleteProduct(id) {
-  if (!confirm("Are you sure you want to delete this product?")) return;
-
-  const {error} = await db.from("products").delete().eq("id", id);
-
-  if (error) {
-    showMessage("Could not delete product: " + error.message, "error");
-    return;
+function addToCart(id){
+ const p=products.find(x=>x.id===id);
+ if(!p)return;
+ const existing=cart.find(x=>x.product_id===id);
+ if(existing){
+  if(existing.quantity>=Number(p.stock)){
+   message("You cannot add more than the available stock.","error");
+   return;
   }
-
-  await loadProducts();
-  showMessage("Product deleted.");
+  existing.quantity++;
+ }else{
+  cart.push({product_id:id,quantity:1});
+ }
+ renderCart();
+ message(p.name+" added to cart.");
 }
 
-db.auth.onAuthStateChange((event, session) => {
-  if (session?.user) {
-    showApp(session.user);
-  } else if (event === "SIGNED_OUT") {
-    showAuth();
-  }
-});
+function changeQuantity(id,change){
+ const item=cart.find(x=>x.product_id===id);
+ const p=products.find(x=>x.id===id);
+ if(!item || !p)return;
+ item.quantity+=change;
+ if(item.quantity<=0)cart=cart.filter(x=>x.product_id!==id);
+ if(item.quantity>Number(p.stock)){
+  item.quantity=Number(p.stock);
+  message("Maximum available stock reached.","error");
+ }
+ renderCart();
+}
 
-db.auth.getSession().then(({data, error}) => {
-  if (error) {
-    showMessage(error.message, "error");
-    return;
-  }
-  if (data.session?.user) showApp(data.session.user);
-});
+function renderCart(){
+ const area=document.getElementById("cartItems");
+ area.innerHTML="";
+ let total=0;
+ if(!cart.length){
+  area.textContent="Your cart is empty.";
+ }else{
+  cart.forEach(item=>{
+   const p=products.find(x=>x.id===item.product_id);
+   if(!p)return;
+   total+=Number(p.price)*item.quantity;
+   const row=document.createElement("div");
+   row.style.marginBottom="12px";
+   const name=document.createElement("strong");
+   name.textContent=p.name+" — "+money(p.price);
+   const quantity=document.createElement("span");
+   quantity.textContent=" | Quantity: "+item.quantity+" ";
+   const minus=document.createElement("button");
+   minus.textContent="−";
+   minus.className="secondary";
+   minus.onclick=()=>changeQuantity(p.id,-1);
+   const plus=document.createElement("button");
+   plus.textContent="+";
+   plus.className="secondary";
+   plus.onclick=()=>changeQuantity(p.id,1);
+   row.append(name,quantity,minus,plus);
+   area.append(row);
+  });
+ }
+ document.getElementById("cartTotal").textContent="Subtotal: "+money(total);
+}
+
+async function placeOrder(){
+ clearMessage();
+ if(!cart.length){message("Your shopping cart is empty.","error");return;}
+ const customer_name=document.getElementById("customerName").value.trim();
+ const customer_phone=document.getElementById("customerPhone").value.trim();
+ const delivery_address=document.getElementById("customerAddress").value.trim();
+ if(customer_name.length<2 || customer_phone.length<7 || delivery_address.length<5){
+  message("Please enter your name, valid phone number and delivery address.","error");
+  return;
+ }
+ const button=document.querySelector("#storefront .card:last-child button");
+ button.disabled=true;
+
+ const {data,error}=await db.rpc("create_public_order",{
+  p_merchant_id:storeId,
+  p_customer_name:customer_name,
+  p_customer_phone:customer_phone,
+  p_delivery_address:delivery_address,
+  p_items:cart
+ });
+
+ button.disabled=false;
+ if(error){
+  message("Order could not be placed: "+error.message,"error");
+  return;
+ }
+
+ cart=[];
+ renderCart();
+ document.getElementById("customerName").value="";
+ document.getElementById("customerPhone").value="";
+ document.getElementById("customerAddress").value="";
+ await loadStoreProductsAfterOrder();
+ message("Your order has been placed! Order reference: "+String(data).slice(0,8));
+}
+
+async function loadStoreProductsAfterOrder(){
+ const {data}=await db.from("products")
+  .select("id,user_id,name,price,stock")
+  .eq("user_id",storeId)
+  .order("created_at",{ascending:false});
+ products=(data||[]).filter(p=>Number(p.stock)>0);
+ renderStoreProducts();
+}
+
+if(publicMode){
+ loadStorefront();
+}else{
+ db.auth.getSession().then(({data,error})=>{
+  if(error){message(error.message,"error");return;}
+  if(data.session?.user)showDashboard(data.session.user);
+  else showAuth();
+ });
+}
 </script>
 </body>
 </html>
