@@ -414,7 +414,20 @@ function renderOrders(orders){
 }
 
 async function updateOrder(id,status)
-async function placeOrder(){
+async function placeOrder(){async function updateOrder(id,status){
+  const {error}=await db.from("orders")
+    .update({status})
+    .eq("id",id)
+    .eq("merchant_id",currentUser.id);
+
+  if(error){
+    message(error.message,"error");
+    return;
+  }
+
+  await loadOrders();
+  message("Order status updated.");
+                           }
   clearMessage();
 
   if(!cart.length){
