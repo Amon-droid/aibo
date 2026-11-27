@@ -507,6 +507,87 @@ async function placeOrder(){
 
   await loadOrders();
   message("Order status updated.");
+}
+
+async function placeOrder(){
+  clearMessage();
+
+  if(!cart.length){
+    message("Your shopping cart is empty.","error");
+    return;
+  }
+
+  const customer_name=document.getElementById("customerName").value.trim();
+  const customer_phone=document.getElementById("customerPhone").value.trim();
+  const delivery_address=document.getElementById("customerAddress").value.trim();
+
+  if(customer_name.length<2 || customer_phone.length<7 || delivery_address.length<5){
+    message("Please enter your name, valid phone number and delivery address.","error");
+    return;
+  }
+
+  const button=document.querySelector("#storefront .card:last-child button");
+  button.disabled=true;
+  button.textContent="Creating order...";
+
+  try{
+    const {data,error}=await db.rpc("create_public_order",{
+      p_merchant_id:storeId,
+      p_customer_name:customer_name,
+      p_customer_phone:customer_phone,
+      p_delivery_address:delivery_address,
+      p_items:cart
+    });
+
+    if(error) throw error;
+
+    if(!data || !data.order_id || !data.payment_token){
+      throw new Error("Order response was incomplete.");
+    }
+
+    const orderId=data.order_id;
+
+    cart=[];
+    renderCart();
+
+    document.getElementById("customerName").value="";
+    document.getElementById("customerPhone").value="";
+    document.getElementById("customerAddress").value="";
+
+    await loadStoreProductsAfterOrder();
+
+    button.textContent="Sending M-Pesa request...";
+
+    const {data:payment,error:paymentError}=await db.functions.invoke(
+      "super-function",
+      {
+        body:{
+          order_id:orderId,
+          payment_token:data.payment_token,
+          phone:customer_phone
+        }
+      }
+    );
+
+    if(paymentError) throw paymentError;
+
+    if(!payment || payment.success!==true){
+      throw new Error("M-Pesa request was not confirmed. Contact the merchant before placing another order.");
+    }
+
+    message("Order created! Check your phone for the M-Pesa payment prompt.");
+
+  }catch(error){
+    message("Checkout error: "+error.message,"error");
+    console.error(error);
+  }finally{
+    button.disabled=false;
+    button.textContent="Place order";
+  }
+ }
+
+  await loadOrders();
+  message("Order status updated.");
                            }
   clearMessage();
 
