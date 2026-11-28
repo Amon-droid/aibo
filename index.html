@@ -1,6 +1,4 @@
-from pathlib import Path
-
-html = r'''<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -28,7 +26,7 @@ html = r'''<!doctype html>
 <section id="store" class="hidden">
 <div class="panel"><h1>Shop this ZEVON store</h1><p class="muted">Shop without creating a customer account.</p><div id="storeMsg" class="notice hidden"></div><div id="storeProducts" class="grid"></div></div>
 <div class="panel"><h2>Your cart</h2><div id="cartItems"><p class="muted">Your cart is empty.</p></div><div class="row"><b>Product subtotal</b><b id="subtotal">KSh 0.00</b></div></div>
-<div class="panel"><h2>Checkout</h2><form id="checkout"><label>Your name</label><input id="customerName" maxlength="120" required><label>M-Pesa phone number</label><input id="phone" type="tel" placeholder="0712345678 or 254712345678" required><label>Delivery address / location</label><textarea id="address" maxlength="500" required></textarea><label>Delivery fee (KSh)</label><input id="deliveryFee" type="number" min="0" step=".01" value="0" required><p class="hint">Enter the delivery fee agreed with the merchant. Commission applies to product subtotal only.</p><button id="placeOrder">Place order</button></form><div id="checkoutMsg" class="notice hidden"></div></div>
+<div class="panel"><h2>Checkout</h2><form id="checkout"><label>Your name</label><input id="customerName" maxlength="120" required><label>M-Pesa phone number</label><input id="phone" type="tel" placeholder="0712345678 or 254712345678" required><label>Delivery address / location</label><textarea id="address" maxlength="500" required></textarea><label>Delivery fee (KSh)</label><input id="deliveryFee" type="number" min="0" step=".01" value="0" required><p class="hint">Enter the delivery fee agreed with the merchant. Commission applies to product subtotal only. M-Pesa currently collects the product subtotal; delivery is recorded separately.</p><button id="placeOrder">Place order & request M-Pesa</button></form><div id="checkoutMsg" class="notice hidden"></div></div>
 </section>
 </main><footer>ZEVON · AI Business Operator</footer>
 <script>
@@ -36,6 +34,7 @@ html = r'''<!doctype html>
 "use strict";
 const URL="https://qcubbcgyjklzjiepqshj.supabase.co";
 const KEY="sb_publishable_k60zm0LE4iJGDc_Zh9Vxuw_Ajulv0no";
+const PAYMENT_URL=URL+"/functions/v1/super-function";
 const db=window.supabase.createClient(URL,KEY),$=id=>document.getElementById(id);
 let user=null,storeId=new URLSearchParams(location.search).get("store"),products=[],orders=[],publicProducts=[],cart=[];
 const money=n=>"KSh "+Number(n||0).toLocaleString("en-KE",{minimumFractionDigits:2,maximumFractionDigits:2});
@@ -55,7 +54,7 @@ $("openStore").onclick=()=>window.open(storeURL(user.id),"_blank","noopener");
 async function loadDashboard(){$("storeLink").value=storeURL(user.id);await Promise.all([loadProducts(),loadOrders()])}
 async function loadProducts(){const {data,error}=await db.from("products").select("id,user_id,name,price,stock,created_at").eq("user_id",user.id).order("created_at",{ascending:false});if(error){$("products").textContent="Could not load products: "+error.message;return}products=data||[];$("productCount").textContent=products.length;renderProducts()}
 function renderProducts(){if(!products.length){$("products").innerHTML='<p class="muted">No products yet. Add your first product above.</p>';return}const root=$("products");root.innerHTML=products.map(p=>`<article class="product"><b>${esc(p.name)}</b><div class="price">${money(p.price)}</div><div class="muted">Stock: ${Number(p.stock||0)}</div><div class="row" style="margin-top:9px"><button class="secondary" data-edit="${esc(p.id)}">Edit</button><button class="danger" data-del="${esc(p.id)}">Delete</button></div></article>`).join("");root.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>editProduct(b.dataset.edit));root.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>deleteProduct(b.dataset.del))}
-$("productForm").onsubmit=async e=>{e.preventDefault();const id=$("productId").value,p={user_id:user.id,name:$("productName").value.trim(),price:Number($("productPrice").value),stock:Number($("productStock").value)};if(!p.name||!Number.isFinite(p.price)||p.price<0||!Number.isInteger(p.stock)||p.stock<0){msg("productMsg","Enter a valid product name, price and stock.","error");return}const b=$("saveProduct");busy(b,true,"Saving…");try{const r=id?await db.from("products").update({name:p.name,price:p.price,stock:p.stock}).eq("id",id).eq("user_id",user.id):await db.from("products").insert(p);if(r.error)throw r.error;resetProduct();msg("productMsg",id?"Product updated.":"Product added.","ok");await loadProducts()}catch(x){msg("productMsg",x.message,"error")}finally{busy(b,false)}};
+$("productForm").onsubmit=async e=>{e.preventDefault();const id=$("productId").value,p={user_id:user.id,name:$("productName").value.trim(),price:Number($("productPrice").value),stock:Number($("productStock").value)};if(!p.name||!Number.isFinite(p.price)||p.price<0||!Number.isInteger(p.stock)||p.stock<0){msg("productMsg","Enter a valid product name, price and stock.","error");return}const b=$("saveProduct");busy(b,true,"Saving…");try{const r=id?await db.from("products").update({name:p.name,price:p.price,stock:p.stock}).eq("id",id):await db.from("products").insert(p);if(r.error)throw r.error;resetProduct();msg("productMsg",id?"Product updated.":"Product added.","ok");await loadProducts()}catch(x){msg("productMsg",x.message,"error")}finally{busy(b,false)}};
 function editProduct(id){const p=products.find(x=>String(x.id)===String(id));if(!p)return;$("productId").value=p.id;$("productName").value=p.name;$("productPrice").value=p.price;$("productStock").value=p.stock;$("formTitle").textContent="Edit product";$("saveProduct").textContent="Update product";$("cancelEdit").classList.remove("hidden")}
 function resetProduct(){$("productForm").reset();$("productId").value="";$("productStock").value=1;$("formTitle").textContent="Add a product";$("saveProduct").textContent="Save product";$("cancelEdit").classList.add("hidden")}
 $("cancelEdit").onclick=resetProduct;
@@ -68,15 +67,76 @@ function renderPublic(){if(!publicProducts.length){$("storeProducts").innerHTML=
 function addCart(id){const p=publicProducts.find(x=>String(x.id)===String(id));if(!p)return;let i=cart.find(x=>String(x.product_id)===String(id));if(i){if(i.quantity>=Number(p.stock||0)){msg("storeMsg","All available stock is already in your cart.","error");return}i.quantity++}else cart.push({product_id:p.id,name:p.name,price:Number(p.price),quantity:1});renderCart()}
 function renderCart(){const root=$("cartItems");if(!cart.length){root.innerHTML='<p class="muted">Your cart is empty.</p>';$("subtotal").textContent=money(0);return}root.innerHTML=cart.map(i=>`<div class="row" style="padding:8px 0;border-bottom:1px solid #e1e6ee"><div><b>${esc(i.name)}</b><div class="muted">${money(i.price)} each</div></div><div class="row" style="flex:0 0 auto"><button class="secondary" data-minus="${esc(i.product_id)}">−</button><b>${i.quantity}</b><button class="secondary" data-plus="${esc(i.product_id)}">+</button><button class="danger" data-remove="${esc(i.product_id)}">×</button></div></div>`).join("");root.querySelectorAll("[data-minus]").forEach(b=>b.onclick=()=>changeQty(b.dataset.minus,-1));root.querySelectorAll("[data-plus]").forEach(b=>b.onclick=()=>changeQty(b.dataset.plus,1));root.querySelectorAll("[data-remove]").forEach(b=>b.onclick=()=>{cart=cart.filter(i=>String(i.product_id)!==String(b.dataset.remove));renderCart()});$("subtotal").textContent=money(cart.reduce((s,i)=>s+i.price*i.quantity,0))}
 function changeQty(id,d){const i=cart.find(x=>String(x.product_id)===String(id)),p=publicProducts.find(x=>String(x.id)===String(id));if(!i)return;if(i.quantity+d<=0)cart=cart.filter(x=>String(x.product_id)!==String(id));else if(i.quantity+d<=Number(p.stock||0))i.quantity+=d;else msg("storeMsg","Quantity exceeds available stock.","error");renderCart()}
-$("checkout").onsubmit=async e=>{e.preventDefault();if(!cart.length){msg("checkoutMsg","Your cart is empty.","error");return}const phone=$("phone").value.trim(),fee=Number($("deliveryFee").value);if(!/^(?:0[17]\d{8}|254[17]\d{8})$/.test(phone)){msg("checkoutMsg","Enter a valid Kenyan mobile number, e.g. 0712345678.","error");return}if(!Number.isFinite(fee)||fee<0){msg("checkoutMsg","Enter a valid delivery fee.","error");return}const b=$("placeOrder");busy(b,true,"Placing order…");try{const {data,error}=await db.rpc("create_public_order",{p_merchant_id:storeId,p_customer_name:$("customerName").value.trim(),p_customer_phone:phone,p_delivery_address:$("address").value.trim(),p_items:cart.map(i=>({product_id:i.product_id,quantity:i.quantity}))});if(error)throw error;let r=Array.isArray(data)?data[0]:data;if(typeof r==="string"){try{r=JSON.parse(r)}catch(_){}}const orderId=r&&(r.order_id||r.id);if(!orderId){msg("checkoutMsg","The database did not return an order ID. Check the Orders table before submitting again.","error");return}const upd=await db.from("orders").update({delivery_fee:fee}).eq("id",orderId).eq("merchant_id",storeId);if(upd.error){msg("checkoutMsg","Order "+String(orderId)+" was created, but delivery fee saving failed: "+upd.error.message+". Contact the merchant before payment.","error");return}const sub=cart.reduce((s,i)=>s+i.price*i.quantity,0);cart=[];renderCart();$("checkout").reset();$("deliveryFee").value="0";msg("checkoutMsg",`Order placed. Reference: ${orderId}. Product subtotal ${money(sub)}; delivery ${money(fee)}. The merchant will confirm your order. M-Pesa has not been triggered because the deployed payment function's exact request format has not yet been verified.`,"ok")}catch(x){msg("checkoutMsg",x.message||"Order could not be placed.","error")}finally{busy(b,false)}};
+
+/* Create the order, save the agreed delivery fee, then request the M-Pesa STK push.
+   The payment Edge Function receives the exact token returned by create_public_order. */
+$("checkout").onsubmit=async e=>{
+  e.preventDefault();
+  if(!cart.length){msg("checkoutMsg","Your cart is empty.","error");return}
+  const phone=$("phone").value.trim(),fee=Number($("deliveryFee").value);
+  if(!/^(?:0[17]\d{8}|254[17]\d{8})$/.test(phone)){
+    msg("checkoutMsg","Enter a valid Kenyan mobile number, e.g. 0712345678.","error");return
+  }
+  if(!Number.isFinite(fee)||fee<0){msg("checkoutMsg","Enter a valid delivery fee.","error");return}
+  const b=$("placeOrder"),itemsForOrder=cart.map(i=>({product_id:i.product_id,quantity:i.quantity}));
+  busy(b,true,"Creating order…");
+  let orderId=null;
+  try{
+    const {data,error}=await db.rpc("create_public_order",{
+      p_merchant_id:storeId,
+      p_customer_name:$("customerName").value.trim(),
+      p_customer_phone:phone,
+      p_delivery_address:$("address").value.trim(),
+      p_items:itemsForOrder
+    });
+    if(error)throw error;
+    let r=Array.isArray(data)?data[0]:data;
+    if(typeof r==="string"){try{r=JSON.parse(r)}catch(_){}}
+    orderId=r&&(r.order_id||r.id);
+    const paymentToken=r&&r.payment_token;
+    if(!orderId||!paymentToken){
+      msg("checkoutMsg","The order function did not return both the order ID and payment token. Do not submit again; contact the merchant and check the Orders table.","error");
+      return;
+    }
+
+    const upd=await db.from("orders").update({delivery_fee:fee})
+      .eq("id",orderId).eq("merchant_id",storeId);
+    if(upd.error){
+      msg("checkoutMsg",`Order ${orderId} was created, but saving the delivery fee failed: ${upd.error.message}. Do not submit again. Contact the merchant.`, "error");
+      return;
+    }
+
+    busy(b,true,"Requesting M-Pesa…");
+    const paymentResponse=await fetch(PAYMENT_URL,{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json",
+        "apikey":KEY,
+        "Authorization":"Bearer "+KEY
+      },
+      body:JSON.stringify({
+        order_id:orderId,
+        payment_token:paymentToken,
+        phone:phone
+      })
+    });
+    let paymentResult={};
+    try{paymentResult=await paymentResponse.json()}catch(_){}
+    if(!paymentResponse.ok||!paymentResult.success){
+      msg("checkoutMsg",`Order ${orderId} was created, but the M-Pesa request failed: ${paymentResult.error||paymentResult.message||"Unknown payment error"}. Do not place the order again. The merchant can see the order and we can fix the payment request.`, "error");
+      cart=[];renderCart();
+      $("checkout").reset();$("deliveryFee").value="0";
+      return;
+    }
+
+    cart=[];renderCart();$("checkout").reset();$("deliveryFee").value="0";
+    msg("checkoutMsg",`Order placed successfully. Reference: ${orderId}. Product subtotal: ${money(itemsForOrder.reduce((sum,item)=>{const p=publicProducts.find(x=>String(x.id)===String(item.product_id));return sum+(Number(p?.price||0)*item.quantity)},0))}; delivery fee recorded separately: ${money(fee)}. ${paymentResult.message||"M-Pesa payment request sent."} Check your phone and enter your M-Pesa PIN only in the official Safaricom prompt.`, "ok");
+  }catch(x){
+    msg("checkoutMsg",orderId?`Order ${orderId} may already exist. Do not submit again. Error: ${x.message||"Payment request failed."}`:(x.message||"Order could not be placed."),"error");
+  }finally{busy(b,false)}
+};
 db.auth.onAuthStateChange((_event,session)=>{user=session?.user||null;if(!storeId&&user&&$("dashboard").classList.contains("hidden")){show("dashboard");loadDashboard().catch(e=>msg("orderMsg",e.message,"error"))}});
 init().catch(e=>{show("auth");msg("authMsg","Could not start ZEVON: "+e.message,"error")});
 })();
 </script>
-</body></html>'''
-
-path = Path("/mnt/data/zevon_index.html")
-path.write_text(html, encoding="utf-8")
-print(f"Created complete HTML file: {path} ({path.stat().st_size:,} bytes)")
-                                                                                                                                                                                                                                                                                                                                                                                                                 
-                                                                                                                                                                                         
+</body></html>
