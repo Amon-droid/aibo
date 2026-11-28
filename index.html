@@ -5,7 +5,7 @@
 <title>ZEVON | AI Business Operator</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{font-family:Arial,sans-serif;color:#172033;background:#f4f6fa}*{box-sizing:border-box}body{margin:0}header{background:#101827;color:white;padding:16px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.brand{font-size:23px;font-weight:800;letter-spacing:2px}.brand small{display:block;font-size:10px;color:#b9c5d8;letter-spacing:1px}main{max-width:1050px;margin:22px auto;padding:0 14px}.panel,.tile{background:white;border:1px solid #e1e6ee;border-radius:13px;padding:17px;margin-bottom:16px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:13px}.row{display:flex;gap:9px;align-items:center;flex-wrap:wrap}.row>*{flex:1}.row button{flex:0 0 auto}h1{font-size:25px;margin:0 0 8px}h2{font-size:20px;margin:0 0 12px}h3{font-size:16px;margin:0 0 8px}.muted,.hint{color:#687386;font-size:13px}label{display:block;font-size:13px;font-weight:bold;margin:10px 0 5px}input,textarea,select{width:100%;padding:11px;border:1px solid #ccd4df;border-radius:8px;font:inherit;background:white}textarea{min-height:75px}button{border:0;border-radius:8px;padding:11px 14px;background:#2457d6;color:white;font-weight:bold;cursor:pointer}button:disabled{opacity:.55}.secondary{background:#e9eef8;color:#20365f}.danger{background:#b93636}.hidden{display:none!important}.notice{padding:11px;border-radius:8px;background:#edf3ff;color:#1b438f;margin:10px 0}.error{background:#fff0f0;color:#a32222}.ok{background:#eaf8ef;color:#17683c}.product{border:1px solid #e1e6ee;border-radius:10px;padding:13px}.price{font-weight:bold;color:#173eaa;margin:5px 0}.stat{font-size:24px;font-weight:bold}.statlabel{font-size:12px;color:#687386}.scroll{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:13px}td,th{text-align:left;padding:9px;border-bottom:1px solid #e1e6ee;vertical-align:top}.status{background:#edf1f7;padding:3px 7px;border-radius:20px}footer{text-align:center;color:#687386;padding:22px;font-size:12px}@media(max-width:560px){main{margin:12px auto}.panel{padding:13px}.row.mobile{display:block}.row.mobile>*{width:100%;margin:4px 0}}
+:root{font-family:Arial,sans-serif;color:#172033;background:#f4f6fa}*{box-sizing:border-box}body{margin:0}header{background:#101827;color:white;padding:16px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.brand{font-size:23px;font-weight:800;letter-spacing:2px}.brand small{display:block;font-size:10px;color:#b9c5d8;letter-spacing:1px}main{max-width:1050px;margin:22px auto;padding:0 14px}.panel,.tile{background:white;border:1px solid #e1e6ee;border-radius:13px;padding:17px;margin-bottom:16px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:13px}.row{display:flex;gap:9px;align-items:center;flex-wrap:wrap}.row>*{flex:1}.row button{flex:0 0 auto}h1{font-size:25px;margin:0 0 8px}h2{font-size:20px;margin:0 0 12px}h3{font-size:16px;margin:0 0 8px}.muted,.hint{color:#687386;font-size:13px}label{display:block;font-size:13px;font-weight:bold;margin:10px 0 5px}input,textarea,select{width:100%;padding:11px;border:1px solid #ccd4df;border-radius:8px;font:inherit;background:white}textarea{min-height:75px}button{border:0;border-radius:8px;padding:11px 14px;background:#2457d6;color:white;font-weight:bold;cursor:pointer}button:disabled{opacity:.55}.secondary{background:#e9eef8;color:#20365f}.danger{background:#b93636}.hidden{display:none!important}.notice{padding:11px;border-radius:8px;background:#edf3ff;color:#1b438f;margin:10px 0}.error{background:#fff0f0;color:#a32222}.ok{background:#eaf8ef;color:#17683c}.product{border:1px solid #e1e6ee;border-radius:10px;padding:13px}.product-photo{width:100%;height:170px;object-fit:cover;border-radius:8px;background:#eef1f5;display:block;margin:0 0 10px}.photo-thumb{width:76px;height:76px;object-fit:cover;border-radius:7px;border:1px solid #d8deea}.photo-item{display:inline-flex;flex-direction:column;gap:5px;margin:5px;vertical-align:top}.photo-actions{display:flex;gap:4px;flex-wrap:wrap}.photo-actions button{font-size:11px;padding:6px 8px}dialog{border:0;border-radius:12px;max-width:min(92vw,700px);padding:12px;box-shadow:0 10px 40px #0005}dialog::backdrop{background:#0009}dialog img{display:block;max-width:86vw;max-height:75vh;object-fit:contain}.price{font-weight:bold;color:#173eaa;margin:5px 0}.stat{font-size:24px;font-weight:bold}.statlabel{font-size:12px;color:#687386}.scroll{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:13px}td,th{text-align:left;padding:9px;border-bottom:1px solid #e1e6ee;vertical-align:top}.status{background:#edf1f7;padding:3px 7px;border-radius:20px}footer{text-align:center;color:#687386;padding:22px;font-size:12px}@media(max-width:560px){main{margin:12px auto}.panel{padding:13px}.row.mobile{display:block}.row.mobile>*{width:100%;margin:4px 0}}
 </style>
 </head>
 <body>
@@ -20,7 +20,7 @@
 </section>
 <section id="dashboard" class="hidden">
 <div class="panel"><h1>Merchant dashboard</h1><p class="muted">Manage products, storefront and customer orders.</p><div class="grid"><div class="tile"><div class="stat" id="productCount">0</div><div class="statlabel">Products</div></div><div class="tile"><div class="stat" id="orderCount">0</div><div class="statlabel">Orders</div></div><div class="tile"><div class="stat" id="commission">KSh 0</div><div class="statlabel">Estimated 5% commission on completed product sales</div></div></div><label>Public storefront link</label><div class="row mobile"><input id="storeLink" readonly><button id="copyLink">Copy link</button><button id="openStore" class="secondary">Open storefront</button></div></div>
-<div class="panel"><h2 id="formTitle">Add a product</h2><form id="productForm"><input id="productId" type="hidden"><div class="grid"><div><label>Product name</label><input id="productName" maxlength="120" required></div><div><label>Price (KSh)</label><input id="productPrice" type="number" min="0" step=".01" required></div><div><label>Stock</label><input id="productStock" type="number" min="0" step="1" value="1" required></div></div><p class="row"><button id="saveProduct">Save product</button><button id="cancelEdit" class="secondary hidden" type="button">Cancel edit</button></p></form><div id="productMsg" class="notice hidden"></div><h3>Your products</h3><div id="products" class="grid">Loading…</div></div>
+<div class="panel"><h2 id="formTitle">Add a product</h2><form id="productForm"><input id="productId" type="hidden"><div class="grid"><div><label>Product name</label><input id="productName" maxlength="120" required></div><div><label>Price (KSh)</label><input id="productPrice" type="number" min="0" step=".01" required></div><div><label>Stock</label><input id="productStock" type="number" min="0" step="1" value="1" required></div></div><label>Product photos (up to 5, max 5 MB each)</label><input id="productPhotos" type="file" accept="image/*" multiple><p class="hint">Choose photos from your phone gallery or camera. The first photo is the main storefront photo.</p><div id="photoManager"></div><p class="row"><button id="saveProduct">Save product</button><button id="cancelEdit" class="secondary hidden" type="button">Cancel edit</button></p></form><div id="productMsg" class="notice hidden"></div><h3>Your products</h3><div id="products" class="grid">Loading…</div></div>
 <div class="panel"><h2>Customer orders</h2><p class="hint">Commission is 5% of completed product subtotal, excluding delivery.</p><div id="orderMsg" class="notice hidden"></div><div class="scroll"><table><thead><tr><th>Order</th><th>Customer</th><th>Items</th><th>Subtotal</th><th>Delivery</th><th>Status</th><th>Update</th></tr></thead><tbody id="orders"><tr><td colspan="7">Loading…</td></tr></tbody></table></div></div>
 </section>
 <section id="store" class="hidden">
@@ -28,9 +28,238 @@
 <div class="panel"><h2>Your cart</h2><div id="cartItems"><p class="muted">Your cart is empty.</p></div><div class="row"><b>Product subtotal</b><b id="subtotal">KSh 0.00</b></div></div>
 <div class="panel"><h2>Checkout</h2><form id="checkout"><label>Your name</label><input id="customerName" maxlength="120" required><label>M-Pesa phone number</label><input id="phone" type="tel" placeholder="0712345678 or 254712345678" required><label>Delivery address / location</label><textarea id="address" maxlength="500" required></textarea><label>Delivery fee (KSh)</label><input id="deliveryFee" type="number" min="0" step=".01" value="0" required><p class="hint">Enter the delivery fee agreed with the merchant. Commission applies to product subtotal only. M-Pesa currently collects the product subtotal; delivery is recorded separately.</p><button id="placeOrder">Place order & request M-Pesa</button></form><div id="checkoutMsg" class="notice hidden"></div></div>
 </section>
-</main><footer>ZEVON · AI Business Operator</footer>
+</main><dialog id="imageViewer"><img id="largeProductImage" alt="Product photo"><p style="text-align:right;margin:10px 0 0"><button type="button" id="closeImageViewer">Close</button></p></dialog><footer>ZEVON · AI Business Operator</footer>
 <script>
 (()=>{
 "use strict";
 const URL="https://qcubbcgyjklzjiepqshj.supabase.co";
 const KEY="sb_publishable_k60zm0LE4iJGDc_Zh9Vxuw_Ajulv0no";
+const PAYMENT_URL=URL+"/functions/v1/super-function";
+const db=window.supabase.createClient(URL,KEY),$=id=>document.getElementById(id);
+let user=null,storeId=new URLSearchParams(location.search).get("store"),products=[],orders=[],publicProducts=[],cart=[],selectedPhotoFiles=[],editingImageUrls=[];
+const money=n=>"KSh "+Number(n||0).toLocaleString("en-KE",{minimumFractionDigits:2,maximumFractionDigits:2});
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function msg(id,s,type=""){const e=$(id);e.textContent=s;e.className="notice"+(type?" "+type:"");e.classList.remove("hidden")}
+function hide(id){$(id).classList.add("hidden")}
+function busy(b,on,label){b.disabled=on;if(on){b.dataset.old=b.textContent;b.textContent=label||"Please wait…"}else if(b.dataset.old){b.textContent=b.dataset.old;delete b.dataset.old}}
+function show(which){["auth","dashboard","store"].forEach(id=>$(id).classList.toggle("hidden",id!==which));$("logoutBtn").classList.toggle("hidden",which!=="dashboard");$("myStoreBtn").classList.toggle("hidden",which!=="dashboard")}
+function storeURL(id){return location.origin+location.pathname+"?store="+encodeURIComponent(id)}
+async function init(){const {data,error}=await db.auth.getSession();if(error)throw error;user=data.session?.user||null;if(storeId){show("store");await loadPublic()}else if(user){show("dashboard");await loadDashboard()}else show("auth")}
+$("loginForm").addEventListener("submit",async e=>{e.preventDefault();hide("authMsg");let b=$("loginBtn");busy(b,true,"Signing in…");try{const {data,error}=await db.auth.signInWithPassword({email:$("loginEmail").value.trim(),password:$("loginPassword").value});if(error)throw error;user=data.user;show("dashboard");await loadDashboard()}catch(x){msg("authMsg",x.message||"Sign in failed.","error")}finally{busy(b,false)}});
+$("signupForm").addEventListener("submit",async e=>{e.preventDefault();hide("authMsg");let b=$("signupBtn");busy(b,true,"Creating…");try{const {data,error}=await db.auth.signUp({email:$("signupEmail").value.trim(),password:$("signupPassword").value,options:{emailRedirectTo:location.origin+location.pathname}});if(error)throw error;if(data.session){user=data.user;show("dashboard");await loadDashboard()}else msg("authMsg","Account created. Confirm your email, then sign in.","ok")}catch(x){msg("authMsg",x.message||"Sign up failed.","error")}finally{busy(b,false)}});
+$("logoutBtn").onclick=async()=>{const {error}=await db.auth.signOut();if(error)msg("orderMsg",error.message,"error");user=null;show("auth")};
+$("myStoreBtn").onclick=()=>location.href=storeURL(user.id);
+$("copyLink").onclick=async()=>{try{await navigator.clipboard.writeText($("storeLink").value);msg("productMsg","Storefront link copied.","ok")}catch(e){$("storeLink").select();msg("productMsg","Select and copy the link.","")}};
+$("openStore").onclick=()=>window.open(storeURL(user.id),"_blank","noopener");
+
+function imagePathFromUrl(url){
+  try{
+    const marker="/storage/v1/object/public/product-images/";
+    const i=String(url).indexOf(marker);
+    return i>=0?decodeURIComponent(String(url).slice(i+marker.length)):null;
+  }catch(_){return null}
+}
+function showLargeImage(url){
+  $("largeProductImage").src=url;
+  const dlg=$("imageViewer");
+  if(dlg.showModal)dlg.showModal();else window.open(url,"_blank","noopener");
+}
+$("closeImageViewer").onclick=()=>$("imageViewer").close();
+$("imageViewer").addEventListener("click",e=>{if(e.target===$("imageViewer"))$("imageViewer").close()});
+function renderPhotoManager(){
+  const root=$("photoManager");if(!root)return;
+  const existing=editingImageUrls.map((url,index)=>`<div class="photo-item"><img class="photo-thumb" src="${esc(url)}" alt="Product photo ${index+1}"><div class="photo-actions">${index?`<button type="button" class="secondary" data-main-photo="${index}">Make main</button>`:'<small class="muted">Main photo</small>'}<button type="button" class="danger" data-remove-existing="${index}">Remove</button></div></div>`).join("");
+  const pending=selectedPhotoFiles.map((file,index)=>`<div class="photo-item"><img class="photo-thumb" src="${window.URL.createObjectURL(file)}" alt="Selected photo"><div class="photo-actions"><small class="muted">New photo</small><button type="button" class="danger" data-remove-pending="${index}">Remove</button></div></div>`).join("");
+  root.innerHTML=(existing+pending)||'<p class="muted">No photos selected yet.</p>';
+  root.querySelectorAll("[data-main-photo]").forEach(b=>b.onclick=()=>{
+    const i=Number(b.dataset.mainPhoto);const chosen=editingImageUrls.splice(i,1)[0];editingImageUrls.unshift(chosen);renderPhotoManager();
+  });
+  root.querySelectorAll("[data-remove-existing]").forEach(b=>b.onclick=()=>removeExistingPhoto(Number(b.dataset.removeExisting)));
+  root.querySelectorAll("[data-remove-pending]").forEach(b=>b.onclick=()=>{
+    selectedPhotoFiles.splice(Number(b.dataset.removePending),1);renderPhotoManager();
+  });
+}
+$("productPhotos").addEventListener("change",e=>{
+  const incoming=Array.from(e.target.files||[]);
+  const valid=[];
+  for(const f of incoming){
+    if(!f.type.startsWith("image/")){msg("productMsg",f.name+" is not an image.","error");continue}
+    if(f.size>5*1024*1024){msg("productMsg",f.name+" is larger than 5 MB. Choose a smaller image.","error");continue}
+    valid.push(f);
+  }
+  if(editingImageUrls.length+selectedPhotoFiles.length+valid.length>5){
+    msg("productMsg","A product can have a maximum of 5 photos. Remove a photo before adding more.","error");
+  }else{
+    selectedPhotoFiles.push(...valid);
+    hide("productMsg");
+  }
+  e.target.value="";renderPhotoManager();
+});
+async function removeExistingPhoto(index){
+  const url=editingImageUrls[index];if(!url)return;
+  const next=editingImageUrls.filter((_,i)=>i!==index);
+  const productId=$("productId").value;
+  if(!productId){editingImageUrls=next;renderPhotoManager();return}
+  const {error}=await db.from("products").update({image_urls:next}).eq("id",productId).eq("user_id",user.id);
+  if(error){msg("productMsg","Could not remove photo: "+error.message,"error");return}
+  editingImageUrls=next;
+  const path=imagePathFromUrl(url);
+  if(path){const removed=await db.storage.from("product-images").remove([path]);if(removed.error)msg("productMsg","Photo removed from the product, but its stored file could not be cleaned up: "+removed.error.message,"error");}
+  renderPhotoManager();await loadProducts();
+}
+async function uploadSelectedPhotos(productId){
+  if(!selectedPhotoFiles.length)return editingImageUrls.slice();
+  const uploadedPaths=[],uploadedUrls=[];
+  for(const file of selectedPhotoFiles){
+    const ext=(file.name.split(".").pop()||"jpg").toLowerCase().replace(/[^a-z0-9]/g,"")||"jpg";
+    const path=`${user.id}/${productId}/${crypto.randomUUID()}.${ext}`;
+    const {error}=await db.storage.from("product-images").upload(path,file,{contentType:file.type,upsert:false,cacheControl:"3600"});
+    if(error){
+      if(uploadedPaths.length)await db.storage.from("product-images").remove(uploadedPaths);
+      throw new Error("Photo upload failed: "+error.message);
+    }
+    uploadedPaths.push(path);
+    const {data}=db.storage.from("product-images").getPublicUrl(path);
+    uploadedUrls.push(data.publicUrl);
+  }
+  const all=[...editingImageUrls,...uploadedUrls];
+  const {error}=await db.from("products").update({image_urls:all}).eq("id",productId).eq("user_id",user.id);
+  if(error){
+    await db.storage.from("product-images").remove(uploadedPaths);
+    throw new Error("Photos uploaded, but saving their links failed: "+error.message);
+  }
+  editingImageUrls=all;selectedPhotoFiles=[];
+  return all;
+}
+async function loadDashboard(){$("storeLink").value=storeURL(user.id);await Promise.all([loadProducts(),loadOrders()])}
+
+async function loadProducts(){const {data,error}=await db.from("products").select("id,user_id,name,price,stock,image_urls,created_at").eq("user_id",user.id).order("created_at",{ascending:false});if(error){$("products").textContent="Could not load products: "+error.message;return}products=data||[];$("productCount").textContent=products.length;renderProducts()}
+function renderProducts(){if(!products.length){$("products").innerHTML='<p class="muted">No products yet. Add your first product above.</p>';return}const root=$("products");root.innerHTML=products.map(p=>`<article class="product">${p.image_urls?.[0]?`<img class="product-photo" src="${esc(p.image_urls[0])}" alt="${esc(p.name)}" data-view-image="${esc(p.image_urls[0])}">`:``}<b>${esc(p.name)}</b><div class="price">${money(p.price)}</div><div class="muted">Stock: ${Number(p.stock||0)}</div><div class="row" style="margin-top:9px"><button class="secondary" data-edit="${esc(p.id)}">Edit</button><button class="danger" data-del="${esc(p.id)}">Delete</button></div></article>`).join("");root.querySelectorAll("[data-view-image]").forEach(img=>img.onclick=()=>showLargeImage(img.dataset.viewImage));root.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>editProduct(b.dataset.edit));root.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>deleteProduct(b.dataset.del))}
+$("productForm").onsubmit=async e=>{
+  e.preventDefault();
+  const id=$("productId").value;
+  const p={user_id:user.id,name:$("productName").value.trim(),price:Number($("productPrice").value),stock:Number($("productStock").value)};
+  if(!p.name||!Number.isFinite(p.price)||p.price<0||!Number.isInteger(p.stock)||p.stock<0){msg("productMsg","Enter a valid product name, price and stock.","error");return}
+  if(editingImageUrls.length+selectedPhotoFiles.length>5){msg("productMsg","A product can have a maximum of 5 photos.","error");return}
+  const b=$("saveProduct");busy(b,true,"Saving…");
+  try{
+    let productId=id;
+    if(id){
+      const r=await db.from("products").update({name:p.name,price:p.price,stock:p.stock}).eq("id",id).eq("user_id",user.id);
+      if(r.error)throw r.error;
+    }else{
+      const r=await db.from("products").insert(p).select("id").single();
+      if(r.error)throw r.error;
+      productId=r.data.id;
+    }
+    if(selectedPhotoFiles.length){
+      busy(b,true,"Uploading photos…");
+      await uploadSelectedPhotos(productId);
+    }
+    resetProduct();msg("productMsg",id?"Product updated.":"Product added.","ok");await loadProducts();
+  }catch(x){
+    msg("productMsg",x.message||"Could not save product.","error");
+    await loadProducts();
+  }finally{busy(b,false)}
+};
+function editProduct(id){
+  const p=products.find(x=>String(x.id)===String(id));if(!p)return;
+  $("productId").value=p.id;$("productName").value=p.name;$("productPrice").value=p.price;$("productStock").value=p.stock;
+  editingImageUrls=Array.isArray(p.image_urls)?p.image_urls.slice(0,5):[];selectedPhotoFiles=[];
+  $("formTitle").textContent="Edit product";$("saveProduct").textContent="Update product";$("cancelEdit").classList.remove("hidden");
+  renderPhotoManager();$("productForm").scrollIntoView({behavior:"smooth",block:"start"});
+}
+function resetProduct(){
+  $("productForm").reset();$("productId").value="";$("productStock").value=1;
+  editingImageUrls=[];selectedPhotoFiles=[];$("photoManager").innerHTML="";
+  $("formTitle").textContent="Add a product";$("saveProduct").textContent="Save product";$("cancelEdit").classList.add("hidden");
+}
+$("cancelEdit").onclick=resetProduct;
+async function deleteProduct(id){
+  const p=products.find(x=>String(x.id)===String(id));if(!p||!confirm("Delete "+p.name+"? This also removes its stored photos."))return;
+  const paths=(Array.isArray(p.image_urls)?p.image_urls:[]).map(imagePathFromUrl).filter(Boolean);
+  if(paths.length){const clean=await db.storage.from("product-images").remove(paths);if(clean.error){msg("productMsg","Could not remove product photos: "+clean.error.message+". Product was not deleted.","error");return}}
+  const {error}=await db.from("products").delete().eq("id",id).eq("user_id",user.id);
+  if(error)msg("productMsg",error.message,"error");else{msg("productMsg","Product and its photos deleted.","ok");await loadProducts()}
+}
+async function loadOrders(){const {data,error}=await db.from("orders").select("id,merchant_id,customer_name,customer_phone,delivery_address,items,subtotal,delivery_fee,status,created_at").eq("merchant_id",user.id).order("created_at",{ascending:false});if(error){$("orders").innerHTML=`<tr><td colspan="7">${esc(error.message)}</td></tr>`;return}orders=data||[];$("orderCount").textContent=orders.length;$("commission").textContent=money(orders.filter(o=>o.status==="Completed").reduce((s,o)=>s+Number(o.subtotal||0)*.05,0));renderOrders()}
+function renderOrders(){if(!orders.length){$("orders").innerHTML='<tr><td colspan="7">No orders received yet.</td></tr>';return}const statuses=["Pending","Confirmed","Processing","Completed","Cancelled"];$("orders").innerHTML=orders.map(o=>`<tr><td>#${esc(String(o.id).slice(0,8))}<br><small>${o.created_at?new Date(o.created_at).toLocaleString():""}</small></td><td>${esc(o.customer_name)}<br>${esc(o.customer_phone)}<br><small>${esc(o.delivery_address)}</small></td><td>${Array.isArray(o.items)?o.items.map(i=>`${esc(i.name||i.product_name||"Item")} × ${Number(i.quantity||1)}`).join("<br>"):"—"}</td><td>${money(o.subtotal)}</td><td>${money(o.delivery_fee)}</td><td>${esc(o.status||"Pending")}</td><td><select data-status="${esc(o.id)}">${statuses.map(s=>`<option ${s===(o.status||"Pending")?"selected":""}>${s}</option>`).join("")}</select><button class="secondary" data-save="${esc(o.id)}" style="margin-top:4px">Save</button></td></tr>`).join("");$("orders").querySelectorAll("[data-save]").forEach(b=>b.onclick=()=>updateStatus(b.dataset.save))}
+async function updateStatus(id){const sel=$("orders").querySelector(`[data-status="${CSS.escape(String(id))}"]`);const {error}=await db.from("orders").update({status:sel.value}).eq("id",id).eq("merchant_id",user.id);if(error)msg("orderMsg",error.message,"error");else{msg("orderMsg","Order status updated.","ok");await loadOrders()}}
+async function loadPublic(){if(!storeId){msg("storeMsg","Store ID is missing.","error");return}const {data,error}=await db.from("products").select("id,user_id,name,price,stock,image_urls,created_at").eq("user_id",storeId).order("created_at",{ascending:false});if(error){msg("storeMsg",error.message,"error");return}publicProducts=data||[];renderPublic()}
+function renderPublic(){if(!publicProducts.length){$("storeProducts").innerHTML='<p class="muted">This store has no products available yet.</p>';return}const root=$("storeProducts");root.innerHTML=publicProducts.map(p=>`<article class="product">${p.image_urls?.[0]?`<img class="product-photo" src="${esc(p.image_urls[0])}" alt="${esc(p.name)}" data-view-image="${esc(p.image_urls[0])}">`:``}<b>${esc(p.name)}</b><div class="price">${money(p.price)}</div><div class="muted">${Number(p.stock||0)} available</div><button data-add="${esc(p.id)}" ${Number(p.stock||0)<=0?"disabled":""}>Add to cart</button></article>`).join("");root.querySelectorAll("[data-view-image]").forEach(img=>img.onclick=()=>showLargeImage(img.dataset.viewImage));root.querySelectorAll("[data-add]").forEach(b=>b.onclick=()=>addCart(b.dataset.add))}
+function addCart(id){const p=publicProducts.find(x=>String(x.id)===String(id));if(!p)return;let i=cart.find(x=>String(x.product_id)===String(id));if(i){if(i.quantity>=Number(p.stock||0)){msg("storeMsg","All available stock is already in your cart.","error");return}i.quantity++}else cart.push({product_id:p.id,name:p.name,price:Number(p.price),quantity:1});renderCart()}
+function renderCart(){const root=$("cartItems");if(!cart.length){root.innerHTML='<p class="muted">Your cart is empty.</p>';$("subtotal").textContent=money(0);return}root.innerHTML=cart.map(i=>`<div class="row" style="padding:8px 0;border-bottom:1px solid #e1e6ee"><div><b>${esc(i.name)}</b><div class="muted">${money(i.price)} each</div></div><div class="row" style="flex:0 0 auto"><button class="secondary" data-minus="${esc(i.product_id)}">−</button><b>${i.quantity}</b><button class="secondary" data-plus="${esc(i.product_id)}">+</button><button class="danger" data-remove="${esc(i.product_id)}">×</button></div></div>`).join("");root.querySelectorAll("[data-minus]").forEach(b=>b.onclick=()=>changeQty(b.dataset.minus,-1));root.querySelectorAll("[data-plus]").forEach(b=>b.onclick=()=>changeQty(b.dataset.plus,1));root.querySelectorAll("[data-remove]").forEach(b=>b.onclick=()=>{cart=cart.filter(i=>String(i.product_id)!==String(b.dataset.remove));renderCart()});$("subtotal").textContent=money(cart.reduce((s,i)=>s+i.price*i.quantity,0))}
+function changeQty(id,d){const i=cart.find(x=>String(x.product_id)===String(id)),p=publicProducts.find(x=>String(x.id)===String(id));if(!i)return;if(i.quantity+d<=0)cart=cart.filter(x=>String(x.product_id)!==String(id));else if(i.quantity+d<=Number(p.stock||0))i.quantity+=d;else msg("storeMsg","Quantity exceeds available stock.","error");renderCart()}
+
+/* Create the order, save the agreed delivery fee, then request the M-Pesa STK push.
+   The payment Edge Function receives the exact token returned by create_public_order. */
+$("checkout").onsubmit=async e=>{
+  e.preventDefault();
+  if(!cart.length){msg("checkoutMsg","Your cart is empty.","error");return}
+  const phone=$("phone").value.trim(),fee=Number($("deliveryFee").value);
+  if(!/^(?:0[17]\d{8}|254[17]\d{8})$/.test(phone)){
+    msg("checkoutMsg","Enter a valid Kenyan mobile number, e.g. 0712345678.","error");return
+  }
+  if(!Number.isFinite(fee)||fee<0){msg("checkoutMsg","Enter a valid delivery fee.","error");return}
+  const b=$("placeOrder"),itemsForOrder=cart.map(i=>({product_id:i.product_id,quantity:i.quantity}));
+  busy(b,true,"Creating order…");
+  let orderId=null;
+  try{
+    const {data,error}=await db.rpc("create_public_order",{
+      p_merchant_id:storeId,
+      p_customer_name:$("customerName").value.trim(),
+      p_customer_phone:phone,
+      p_delivery_address:$("address").value.trim(),
+      p_items:itemsForOrder
+    });
+    if(error)throw error;
+    let r=Array.isArray(data)?data[0]:data;
+    if(typeof r==="string"){try{r=JSON.parse(r)}catch(_){}}
+    orderId=r&&(r.order_id||r.id);
+    const paymentToken=r&&r.payment_token;
+    if(!orderId||!paymentToken){
+      msg("checkoutMsg","The order function did not return both the order ID and payment token. Do not submit again; contact the merchant and check the Orders table.","error");
+      return;
+    }
+
+    const upd=await db.from("orders").update({delivery_fee:fee})
+      .eq("id",orderId).eq("merchant_id",storeId);
+    if(upd.error){
+      msg("checkoutMsg",`Order ${orderId} was created, but saving the delivery fee failed: ${upd.error.message}. Do not submit again. Contact the merchant.`, "error");
+      return;
+    }
+
+    busy(b,true,"Requesting M-Pesa…");
+    const paymentResponse=await fetch(PAYMENT_URL,{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json",
+        "apikey":KEY,
+        "Authorization":"Bearer "+KEY
+      },
+      body:JSON.stringify({
+        order_id:orderId,
+        payment_token:paymentToken,
+        phone:phone
+      })
+    });
+    let paymentResult={};
+    try{paymentResult=await paymentResponse.json()}catch(_){}
+    if(!paymentResponse.ok||!paymentResult.success){
+      msg("checkoutMsg",`Order ${orderId} was created, but the M-Pesa request failed: ${paymentResult.error||paymentResult.message||"Unknown payment error"}. Do not place the order again. The merchant can see the order and we can fix the payment request.`, "error");
+      cart=[];renderCart();
+      $("checkout").reset();$("deliveryFee").value="0";
+      return;
+    }
+
+    cart=[];renderCart();$("checkout").reset();$("deliveryFee").value="0";
+    msg("checkoutMsg",`Order placed successfully. Reference: ${orderId}. Product subtotal: ${money(itemsForOrder.reduce((sum,item)=>{const p=publicProducts.find(x=>String(x.id)===String(item.product_id));return sum+(Number(p?.price||0)*item.quantity)},0))}; delivery fee recorded separately: ${money(fee)}. ${paymentResult.message||"M-Pesa payment request sent."} Check your phone and enter your M-Pesa PIN only in the official Safaricom prompt.`, "ok");
+  }catch(x){
+    msg("checkoutMsg",orderId?`Order ${orderId} may already exist. Do not submit again. Error: ${x.message||"Payment request failed."}`:(x.message||"Order could not be placed."),"error");
+  }finally{busy(b,false)}
+};
+db.auth.onAuthStateChange((_event,session)=>{user=session?.user||null;if(!storeId&&user&&$("dashboard").classList.contains("hidden")){show("dashboard");loadDashboard().catch(e=>msg("orderMsg",e.message,"error"))}});
+init().catch(e=>{show("auth");msg("authMsg","Could not start ZEVON: "+e.message,"error")});
+})();
+</script>
+</body></html>
